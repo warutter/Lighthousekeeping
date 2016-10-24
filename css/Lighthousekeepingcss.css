@@ -1,0 +1,36 @@
+/*This is a CSS file for lighthousekeeping*/
+* {
+	text-align: center;
+	/*background-color: rgb(252, 249, 244);*/
+	color: rgb(43, 27, 23);
+}
+
+h1 {
+	font-family:"Libre Baskerville";
+	font-size:23px;
+}
+
+h2 {
+	font-family:"Playfair Display";
+	font-size:11px;
+}
+
+svg {
+	margin-left:auto; 
+	margin-right:auto; 
+	display:block;
+}
+
+.axis path,
+.axis line {
+	fill:none;
+	stroke: rgb(43, 27, 23);
+	shape-rendering: crispEdges;
+	stroke-width:1;
+}
+
+.axis text {
+	font-family: "Playfair Display";
+	font-size: 11px;
+	color: rgb(43, 27, 23);
+}
