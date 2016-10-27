@@ -52,7 +52,7 @@ for(i=0; i < lhk.length; i++) { //for every object in the lhk array
 
 		po[lhk[i].place][1].push([lhk[i].ident, lhk[i].page, lhk[i].date]); //add plot point to place in po.
 
-		//console.log()
+		//console.log("added plot point to " + lhk[i].place + " in po")
 
 	} else { //place isn't in po
 
@@ -75,9 +75,9 @@ for(i=0; i < lhk.length; i++) { //for every object in the lhk array
 
 var pad = 20;
 
-var w = 700; // slopeSvg width var
+var w = 1000; // slopeSvg width var
 
-var h = 500 + 2 * pad; // slopeSvg height var
+var h = 700 + 2 * pad; // slopeSvg height var
 
 var dAxPlace = w/8; //this sets where the date axis will be in the slopeSvg
 
@@ -106,6 +106,7 @@ var conns = slopeSvg.selectAll("line") //create our connections
 					.enter()
 					.append("line");
 
+
 conns.attr("x1", dAxPlace) //tell lines where to start and end
 	.attr("x2", pAxPlace)
 	.attr("y1", function(d){ //y1 is the date
@@ -114,8 +115,37 @@ conns.attr("x1", dAxPlace) //tell lines where to start and end
 	.attr("y2", function(d){ //y2 is the page
 		return pad + pageScale(d[1]);
 	})
+	.attr("class", "connections")
 	.attr("stroke","black") //black line
-	.attr("stroke-width",.5); //width of line
+	.attr("stroke-width",.5) //width of line
+	.on("mouseover", function (d) { // what happens when you put your mouse over a connection
+		d3.selectAll(".connections") //all connections get thinner
+			.attr("stroke-width",.25);
+
+		d3.select(this) //selected connection gets thicker
+			.attr("stroke-width",1);
+
+		slopeSvg.append("text")
+				.attr("class","infoText")
+				.attr("text-anchor", "middle")
+				.attr("x",0)
+				.attr("y","-4")
+				.attr("font-family","Playfair Display")
+				.attr("font-size","11px")
+				.attr("color","rgb(43, 27, 23)")
+				//the following is a translation and rotation to make the text land in the middle of its respective line, matching its slope.
+				.attr("transform","translate("+(dAxPlace+(pAxPlace-dAxPlace)/2)+" , "+(pad+dateScale(d[2])+(pageScale(d[1])- dateScale(d[2]))/2)+") rotate("+(180 / Math.PI)*Math.atan((pageScale(d[1])- dateScale(d[2]))/(pAxPlace-dAxPlace))+")")
+				.text(lhk[d[0]].title+": Year "+d[2]+", Page "+d[1] );
+				
+	})
+	.on("mouseout", function () { //what happens when you take your mouse away from a connection
+		d3.selectAll(".connections")
+			.transition()
+			.attr("stroke-width",.5); // stroke-widths go back to normal
+
+		d3.select(".infoText")
+			.remove();
+	});
 
 //make axis for date:
 
@@ -140,7 +170,7 @@ slopeSvg.append("g") //page axis in a new group
 
 slopeSvg.append("text")
 		.text("Date")
-		.attr("x",dAxPlace - 22)
+		.attr("x",dAxPlace - 22) //adjusted till it looked good
 		.attr("y",10)
 		.attr("font-size", "11px")
 		.attr("font-family", "Playfair Display");
@@ -152,7 +182,8 @@ slopeSvg.append("text")
 		.attr("x",pAxPlace)
 		.attr("y",10)
 		.attr("font-size", "11px")
-		.attr("font-family", "Playfair Display");
+		.attr("font-family", "Playfair Display")
+		.attr("color","rgb(43, 27, 23)");
 
 
 

@@ -3,6 +3,7 @@
 	text-align: center;
 	/*background-color: rgb(252, 249, 244);*/
 	color: rgb(43, 27, 23);
+	fill: rgb(43, 27, 23);
 }
 
 h1 {
@@ -34,3 +35,4 @@ svg {
 	font-size: 11px;
 	color: rgb(43, 27, 23);
 }
+
